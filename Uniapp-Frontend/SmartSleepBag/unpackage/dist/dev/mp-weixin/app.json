@@ -1,0 +1,54 @@
+{
+  "pages": [
+    "pages/Home/Home",
+    "pages/Monitor/Monitor",
+    "pages/Analysis/Analysis",
+    "pages/Report/Report",
+    "pages/Profile/Profile"
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "智能婴儿睡袋",
+    "navigationBarBackgroundColor": "#ffffff",
+    "backgroundColor": "#f0f8ff"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#ff69b4",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/Home/Home",
+        "iconPath": "static/tabbar/home.png",
+        "selectedIconPath": "static/tabbar/home-active.png",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/Monitor/Monitor",
+        "iconPath": "static/tabbar/monitor.png",
+        "selectedIconPath": "static/tabbar/monitor-active.png",
+        "text": "监测"
+      },
+      {
+        "pagePath": "pages/Analysis/Analysis",
+        "iconPath": "static/tabbar/analysis.png",
+        "selectedIconPath": "static/tabbar/analysis-active.png",
+        "text": "分析"
+      },
+      {
+        "pagePath": "pages/Report/Report",
+        "iconPath": "static/tabbar/report.png",
+        "selectedIconPath": "static/tabbar/report-active.png",
+        "text": "报告"
+      },
+      {
+        "pagePath": "pages/Profile/Profile",
+        "iconPath": "static/tabbar/profile.png",
+        "selectedIconPath": "static/tabbar/profile-active.png",
+        "text": "我的"
+      }
+    ]
+  },
+  "usingComponents": {}
+}

@@ -1,0 +1,84 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path" : "pages/Home/Home",
+			"style" : 
+			{
+				"navigationBarTitleText" : "首页",
+			}
+		},
+		{
+			"path" : "pages/Monitor/Monitor",
+			"style" : 
+			{
+				"navigationBarTitleText" : "实时检测"
+			}
+		},
+		{
+			"path" : "pages/Analysis/Analysis",
+			"style" : 
+			{
+				"navigationBarTitleText" : "睡眠分析"
+			}
+		},
+		{
+			"path" : "pages/Report/Report",
+			"style" : 
+			{
+				"navigationBarTitleText" : "数据报告"
+			}
+		},
+		{
+			"path" : "pages/Profile/Profile",
+			"style" : 
+			{
+				"navigationBarTitleText" : "我的"
+			}
+		}
+	],
+	"globalStyle": {
+	    "navigationBarTextStyle": "black",
+	    "navigationBarTitleText": "智能婴儿睡袋",
+	    "navigationBarBackgroundColor": "#ffffff",
+	    "backgroundColor": "#f0f8ff"
+	  },
+	  "tabBar": {
+	    "color": "#999999",
+	    "selectedColor": "#ff69b4",
+	    "backgroundColor": "#ffffff",
+	    "borderStyle": "white",
+	    "list": [
+	      {
+	        "pagePath": "pages/Home/Home",
+	        "iconPath": "static/tabbar/home.png",
+	        "selectedIconPath": "static/tabbar/home-active.png",
+	        "text": "首页"
+	      },
+	      {
+	        "pagePath": "pages/Monitor/Monitor",
+	        "iconPath": "static/tabbar/monitor.png",
+	        "selectedIconPath": "static/tabbar/monitor-active.png",
+	        "text": "监测"
+	      },
+	      {
+	        "pagePath": "pages/Analysis/Analysis",
+	        "iconPath": "static/tabbar/analysis.png",
+	        "selectedIconPath": "static/tabbar/analysis-active.png",
+	        "text": "分析"
+	      },
+	      {
+	        "pagePath": "pages/Report/Report",
+	        "iconPath": "static/tabbar/report.png",
+	        "selectedIconPath": "static/tabbar/report-active.png",
+	        "text": "报告"
+	      },
+	      {
+	        "pagePath": "pages/Profile/Profile",
+	        "iconPath": "static/tabbar/profile.png",
+	        "selectedIconPath": "static/tabbar/profile-active.png",
+	        "text": "我的"
+	      }
+	    ]
+	  },
+	"uniIdRouter": {}
+}

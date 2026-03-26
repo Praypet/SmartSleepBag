@@ -1,0 +1,1 @@
+{"version":3,"file":"SleepState.model.d.ts","sourceRoot":"","sources":["../../src/models/SleepState.model.ts"],"names":[],"mappings":"AAAA,MAAM,WAAW,UAAU;IACzB,EAAE,EAAE,MAAM,CAAC;IACX,MAAM,EAAE,MAAM,CAAC;IACf,SAAS,EAAE,IAAI,CAAC;IAChB,OAAO,CAAC,EAAE,IAAI,CAAC;IACf,KAAK,EAAE,OAAO,GAAG,aAAa,GAAG,YAAY,GAAG,KAAK,CAAC;IACtD,QAAQ,EAAE,OAAO,CAAC;IAClB,YAAY,CAAC,EAAE,MAAM,CAAC;CACvB"}

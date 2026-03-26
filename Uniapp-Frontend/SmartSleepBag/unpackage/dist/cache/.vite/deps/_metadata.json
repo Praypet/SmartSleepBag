@@ -1,0 +1,25 @@
+{
+  "hash": "62e9e152",
+  "configHash": "c1b1cf7e",
+  "lockfileHash": "668f1798",
+  "browserHash": "ddf8e550",
+  "optimized": {
+    "dayjs": {
+      "src": "../../../../../node_modules/dayjs/dayjs.min.js",
+      "file": "dayjs.js",
+      "fileHash": "49b7017d",
+      "needsInterop": true
+    },
+    "dayjs/locale/zh-cn": {
+      "src": "../../../../../node_modules/dayjs/locale/zh-cn.js",
+      "file": "dayjs_locale_zh-cn.js",
+      "fileHash": "f5754d2f",
+      "needsInterop": true
+    }
+  },
+  "chunks": {
+    "chunk-NTWQCC5V": {
+      "file": "chunk-NTWQCC5V.js"
+    }
+  }
+}
