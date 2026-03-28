@@ -51,7 +51,7 @@
           <scroll-view 
             class="chat-messages" 
             scroll-y 
-            :scroll-into-view="scrollToView" 
+						:scroll-into-view="scrollToView"
             scroll-with-animation
             :show-scrollbar="false"
           >
@@ -66,7 +66,7 @@
             </view>
             
             <!-- 消息列表 --> 
-            <view v-for="(msg, idx) in chatState.messages" :key="msg.id || idx" :id="'msg-' + idx">
+            <view v-for="(msg, idx) in chatState.messages" :key="msg.id || idx" :id="'msg-' + msg.id">
               <transition name="message-fade" appear>
                 <view class="message-item" :class="msg.role">
                   <!-- 助手头像 -->
@@ -76,45 +76,33 @@
                   
                   <view class="message-wrapper">
 										<view class="msg-bubble" :class="msg.role">
-											<template v-if="msg.loading">
-												<view class="msg-loading">
-													<view class="dot"></view>
-													<view class="dot"></view>
-													<view class="dot"></view>
-												</view>
-											</template>
-
-											<text v-else class="msg-content">
-												{{ msg.content }}
-											</text>
+											<text class="msg-content">{{ msg.content }}</text>
 										</view>
 										<text class="msg-time">{{ formatTime(msg.time) }}</text>
                   </view>
                   
                   <!-- 用户头像 -->
                   <view v-if="msg.role === 'user'" class="avatar-circle user">
-                    <image class="msg-avatar user-avatar" src="/static/default-avatar.png" mode="aspectFill"></image>
+                    <image class="msg-avatar user-avatar" src="/static/avatar.png" mode="aspectFill"></image>
                   </view>
                 </view>
               </transition>
             </view>
-            
-            <!-- 正在输入动画 -->
-            <transition name="typing-fade">
-              <view v-if="chatState.isTyping" class="message-item assistant typing">
-                <view class="avatar-circle">
-                  <image class="msg-avatar" :src="chatConfig.avatar" mode="aspectFill"></image>
-                </view>
-                <view class="typing-bubble">
-                  <view class="typing-dots">
-                    <view class="typing-dot"></view>
-                    <view class="typing-dot"></view>
-                    <view class="typing-dot"></view>
-                  </view>
-                  <text class="typing-text">正在输入...</text>
-                </view>
-              </view>
-            </transition>
+						<transition name="typing-fade">
+							<view v-if="chatState.isTyping" class="message-item assistant typing">
+								<view class="avatar-circle">
+									<image class="msg-avatar" :src="chatConfig.avatar" mode="aspectFill"></image>
+								</view>
+								<view class="typing-bubble">
+									<view class="typing-dots">
+										<view class="typing-dot"></view>
+										<view class="typing-dot"></view>
+										<view class="typing-dot"></view>
+									</view>
+									<text class="typing-text">思考中...</text>
+								</view>
+							</view>
+						</transition>
           </scroll-view>
           
           <!-- 快捷回复区域 -->
@@ -163,7 +151,6 @@
 <script setup>
 import { ref, watch, nextTick, onMounted } from 'vue'
 import { 
-	eventBus,
   chatConfig, 
   chatState, 
   openChat, 
@@ -199,7 +186,7 @@ watch(
   async () => {
     await nextTick()
     if (chatState.messages.length > 0) {
-      scrollToView.value = `msg-${chatState.messages.length - 1}`
+      scrollToView.value = `msg-${chatState.messages[chatState.messages.length-1].id}`
     }
   }
 )
@@ -224,20 +211,10 @@ const handleCloseChat = () => {
 // 发送消息
 const handleSendMessage = () => {
   if (!inputMessage.value.trim()) return
-
   const message = inputMessage.value
   inputMessage.value = ''
-
+	chatState.isTyping = true
   sendChatMessage(message)
-
-  // ⭐ 添加一条 loading 消息
-  chatState.messages.push({
-    id: Date.now(),
-    role: 'assistant',
-    content: '',
-    loading: true,
-    time: Date.now()
-  })
 }
 
 // 快捷回复
@@ -250,7 +227,7 @@ const handleQuickReply = (reply) => {
 const onInputFocus = () => {
   // 滚动到底部
   nextTick(() => {
-    scrollToView.value = `msg-${chatState.messages.length - 1}`
+    scrollToView.value = `msg-${chatState.messages[chatState.messages.length-1].id}`
   })
 }
 
@@ -281,7 +258,6 @@ const handleEmoji = () => {
 const updateChatData = (data) => {
   if (data.babyInfo) {
 		babyInfo.value = {...data.babyInfo,id:1}
-		console.log(babyInfo.value)
 		updateBabyInfo(data.babyInfo)
 	}
   if (data.sensors) updateSensors(data.sensors)
@@ -293,16 +269,6 @@ const updateChatData = (data) => {
 const showReminder = () => {
   triggerReminder()
 }
-
-onMounted(() => {
-  // 监听消息更新事件
-  eventBus.on('message-updated', () => {
-    // 这里的 nextTick 是在组件内部调用的，能正确获取到 DOM 更新
-    nextTick(() => {
-      scrollToView.value = `msg-${chatState.messages.length - 1}`
-    })
-  })
-})
 
 // 暴露给父组件使用
 defineExpose({
@@ -616,40 +582,6 @@ defineExpose({
             padding: 15rpx 20rpx;
             border-radius: 20rpx;
             position: relative;
-						
-						.msg-loading {
-						  display: flex;
-						  align-items: center;
-						  gap: 8rpx;
-						
-						  .dot {
-						    width: 10rpx;
-						    height: 10rpx;
-						    border-radius: 50%;
-						    background: #ff88b0;
-						
-						    animation: dotWave 1.2s infinite ease-in-out;
-						  }
-						
-						  .dot:nth-child(2) {
-						    animation-delay: 0.2s;
-						  }
-						
-						  .dot:nth-child(3) {
-						    animation-delay: 0.4s;
-						  }
-						}
-						
-						@keyframes dotWave {
-						  0%, 80%, 100% {
-						    transform: scale(0.6);
-						    opacity: 0.5;
-						  }
-						  40% {
-						    transform: scale(1);
-						    opacity: 1;
-						  }
-						}
             
             &.assistant {
               background: rgba(255, 255, 255, 0.9);
@@ -660,7 +592,7 @@ defineExpose({
               
               .msg-content {
                 color: #5a5a7a;
-                font-size: 28rpx;
+                font-size: 26rpx;
                 line-height: 1.5;
               }
             }
@@ -672,7 +604,7 @@ defineExpose({
               
               .msg-content {
                 color: #fff;
-                font-size: 28rpx;
+                font-size: 26rpx;
                 line-height: 1.5;
 								
 								word-break: break-all;      /* 1. 允许在任意字符间（包括数字、字母中间）切断换行 */

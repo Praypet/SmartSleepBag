@@ -91,29 +91,14 @@ export const getSmartReminderMessage = () => {
   }
 }
 
-
-export const eventBus = {
-  events: {},
-  on(event, callback) {
-    if (!this.events[event]) this.events[event] = []
-    this.events[event].push(callback)
-  },
-  emit(event, data) {
-    if (this.events[event]) this.events[event].forEach(cb => cb(data))
-  }
-}
 // 添加消息
 export const addMessage = (role, content) => {
-	if(role==='assistant'){
-		const loadingIndex = chatState.messages.findIndex(m => m.loading)
-		if (loadingIndex !== -1) chatState.messages.splice(loadingIndex, 1)
-		eventBus.emit('message-updated') 
-	}
+	if(role==='assistant'){ chatState.isTyping = false }
   chatState.messages.push({
     role,
     content,
     time: Date.now(),
-    id: Date.now() + Math.random()
+    id: Date.now()
   })
 }
 

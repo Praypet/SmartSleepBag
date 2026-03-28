@@ -1,1 +1,1 @@
-{"version":3,"file":"assets.js","sources":["../../static/default-avatar.png"],"sourcesContent":["export default \"/static/default-avatar.png\""],"names":[],"mappings":";AAAA,MAAe,aAAA;;"}
+{"version":3,"file":"assets.js","sources":["static/avatar.png"],"sourcesContent":["export default \"__VITE_ASSET__2ee2d0e2__\""],"names":[],"mappings":";AAAA,MAAe,aAAA;;"}

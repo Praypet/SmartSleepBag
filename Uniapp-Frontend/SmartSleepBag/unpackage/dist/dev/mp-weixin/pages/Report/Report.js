@@ -69,14 +69,13 @@ const _sfc_main = {
       common_vendor.index.showLoading({ title: "加载中..." });
       try {
         const res = await api_report.getReportData({ dateRange: currentRangeIndex.value, eventsLimit: 5 });
-        common_vendor.index.__f__("log", "at pages/Report/Report.vue:218", res);
         reportData.statistics = res[0].data.statistics;
         reportData.previewData = res[1].data.previewData;
         reportData.weeklyData = res[1].data.weeklyData;
         reportData.abnormalEvents = res[2].data.abnormalEvents;
       } catch (error) {
         common_vendor.index.showToast({ title: "加载失败", icon: "none" });
-        common_vendor.index.__f__("error", "at pages/Report/Report.vue:226", "获取报告数据失败:", error);
+        common_vendor.index.__f__("error", "at pages/Report/Report.vue:224", "获取报告数据失败:", error);
       } finally {
         common_vendor.index.hideLoading();
       }
@@ -88,14 +87,14 @@ const _sfc_main = {
         const res = await api_report.exportReport({ dateRange: dateRange.value });
         if (res.code === 200) {
           common_vendor.index.showToast({ title: "导出成功", icon: "success" });
-          common_vendor.index.__f__("log", "at pages/Report/Report.vue:241", "导出文件:", res.data);
+          common_vendor.index.__f__("log", "at pages/Report/Report.vue:239", "导出文件:", res.data);
           common_vendor.index.downloadFile({
             url: res.data.url,
             success: (downloadRes) => {
               common_vendor.index.openDocument({
                 filePath: downloadRes.tempFilePath,
                 success: () => {
-                  common_vendor.index.__f__("log", "at pages/Report/Report.vue:250", "打开文档成功");
+                  common_vendor.index.__f__("log", "at pages/Report/Report.vue:248", "打开文档成功");
                 }
               });
             }
@@ -103,7 +102,7 @@ const _sfc_main = {
         }
       } catch (error) {
         common_vendor.index.showToast({ title: "导出失败", icon: "none" });
-        common_vendor.index.__f__("error", "at pages/Report/Report.vue:258", "导出失败:", error);
+        common_vendor.index.__f__("error", "at pages/Report/Report.vue:256", "导出失败:", error);
       } finally {
         common_vendor.index.hideLoading();
         exporting.value = false;
@@ -117,7 +116,7 @@ const _sfc_main = {
           await loadReportData();
         },
         fail: () => {
-          common_vendor.index.__f__("log", "at pages/Report/Report.vue:274", "取消选择");
+          common_vendor.index.__f__("log", "at pages/Report/Report.vue:272", "取消选择");
         }
       });
     };

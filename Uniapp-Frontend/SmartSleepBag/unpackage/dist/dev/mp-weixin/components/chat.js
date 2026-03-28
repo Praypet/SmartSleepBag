@@ -2,6 +2,7 @@
 const common_vendor = require("../common/vendor.js");
 const common_assets = require("../common/assets.js");
 const api_chat = require("../api/chat.js");
+const utils_websocket = require("../utils/websocket.js");
 if (!Array) {
   const _component_transition = common_vendor.resolveComponent("transition");
   const _easycom_uni_icons2 = common_vendor.resolveComponent("uni-icons");
@@ -18,6 +19,7 @@ const _sfc_main = {
     const scrollToView = common_vendor.ref("");
     const isLoadingMessages = common_vendor.ref(false);
     const quickReplies = common_vendor.ref(["睡眠怎么样？", "体温正常吗？", "今日提醒", "成长记录"]);
+    const babyInfo = common_vendor.ref("");
     const formatTime = (timestamp) => {
       if (!timestamp)
         return "";
@@ -29,9 +31,11 @@ const _sfc_main = {
     common_vendor.watch(
       () => api_chat.chatState.messages.length,
       async () => {
+        common_vendor.index.__f__("log", "at components/chat.vue:179", api_chat.chatState.messages);
         await common_vendor.nextTick$1();
         if (api_chat.chatState.messages.length > 0) {
-          scrollToView.value = `msg-${api_chat.chatState.messages.length - 1}`;
+          const lastMsg = api_chat.chatState.messages[api_chat.chatState.messages.length - 1];
+          scrollToView.value = `msg-${lastMsg.id}`;
         }
       }
     );
@@ -46,12 +50,19 @@ const _sfc_main = {
     const handleCloseChat = () => {
       api_chat.closeChat();
     };
-    const handleSendMessage = async () => {
+    const handleSendMessage = () => {
       if (!inputMessage.value.trim())
         return;
       const message = inputMessage.value;
       inputMessage.value = "";
-      await api_chat.sendUserMessage(message);
+      utils_websocket.sendChatMessage(message);
+      api_chat.chatState.messages.push({
+        id: Date.now(),
+        role: "assistant",
+        content: "",
+        loading: true,
+        time: Date.now()
+      });
     };
     const handleQuickReply = (reply) => {
       inputMessage.value = reply;
@@ -59,7 +70,8 @@ const _sfc_main = {
     };
     const onInputFocus = () => {
       common_vendor.nextTick$1(() => {
-        scrollToView.value = `msg-${api_chat.chatState.messages.length - 1}`;
+        const lastMsg = api_chat.chatState.messages[api_chat.chatState.messages.length - 1];
+        scrollToView.value = `msg-${lastMsg.id}`;
       });
     };
     const onInputBlur = () => {
@@ -72,8 +84,10 @@ const _sfc_main = {
       });
     };
     const updateChatData = (data) => {
-      if (data.babyInfo)
+      if (data.babyInfo) {
+        babyInfo.value = { ...data.babyInfo, id: 1 };
         api_chat.updateBabyInfo(data.babyInfo);
+      }
       if (data.sensors)
         api_chat.updateSensors(data.sensors);
       if (data.sleepStatus)
@@ -126,34 +140,30 @@ const _sfc_main = {
           }, msg.role === "assistant" ? {
             b: common_vendor.unref(api_chat.chatConfig).avatar
           } : {}, {
-            c: common_vendor.t(msg.content),
-            d: common_vendor.n(msg.role),
-            e: common_vendor.t(formatTime(msg.time)),
-            f: msg.role === "user"
+            c: msg.loading
+          }, msg.loading ? {} : {
+            d: common_vendor.t(msg.content)
+          }, {
+            e: common_vendor.n(msg.role),
+            f: common_vendor.t(formatTime(msg.time)),
+            g: msg.role === "user"
           }, msg.role === "user" ? {
-            g: common_assets._imports_0
+            h: common_assets._imports_0
           } : {}, {
-            h: common_vendor.n(msg.role),
-            i: "3b03e103-4-" + i0 + ",3b03e103-2",
-            j: msg.id || idx,
-            k: "msg-" + idx
+            i: common_vendor.n(msg.role),
+            j: "3b03e103-4-" + i0 + ",3b03e103-2",
+            k: msg.id || idx,
+            l: "msg-" + msg.id
           });
         }),
         s: common_vendor.p({
           name: "message-fade",
           appear: true
         }),
-        t: common_vendor.unref(api_chat.chatState).isTyping
-      }, common_vendor.unref(api_chat.chatState).isTyping ? {
-        v: common_vendor.unref(api_chat.chatConfig).avatar
-      } : {}, {
-        w: common_vendor.p({
-          name: "typing-fade"
-        }),
-        x: scrollToView.value,
-        y: quickReplies.value.length > 0
+        t: scrollToView.value,
+        v: quickReplies.value.length > 0
       }, quickReplies.value.length > 0 ? {
-        z: common_vendor.f(quickReplies.value, (reply, k0, i0) => {
+        w: common_vendor.f(quickReplies.value, (reply, k0, i0) => {
           return {
             a: common_vendor.t(reply),
             b: reply,
@@ -161,33 +171,33 @@ const _sfc_main = {
           };
         })
       } : {}, {
-        A: common_vendor.o(handleSendMessage),
-        B: common_vendor.o(onInputFocus),
-        C: common_vendor.o(onInputBlur),
-        D: inputMessage.value,
-        E: common_vendor.o(($event) => inputMessage.value = $event.detail.value),
-        F: common_vendor.p({
+        x: common_vendor.o(handleSendMessage),
+        y: common_vendor.o(onInputFocus),
+        z: common_vendor.o(onInputBlur),
+        A: inputMessage.value,
+        B: common_vendor.o(($event) => inputMessage.value = $event.detail.value),
+        C: common_vendor.p({
           type: "mic",
           size: "22",
           color: "#ff88b0"
         }),
-        G: common_vendor.o(handleVoiceInput),
-        H: common_vendor.p({
+        D: common_vendor.o(handleVoiceInput),
+        E: common_vendor.p({
           type: "paperplane",
           size: "20",
           color: "#fff"
         }),
-        I: inputMessage.value.trim() ? 1 : "",
-        J: common_vendor.o(handleSendMessage),
-        K: common_vendor.o(() => {
+        F: inputMessage.value.trim() ? 1 : "",
+        G: common_vendor.o(handleSendMessage),
+        H: common_vendor.o(() => {
         })
       }) : {}, {
-        L: common_vendor.p({
+        I: common_vendor.p({
           name: "drawer-slide"
         }),
-        M: common_vendor.o(handleCloseChat)
+        J: common_vendor.o(handleCloseChat)
       }) : {}, {
-        N: common_vendor.p({
+        K: common_vendor.p({
           name: "drawer-fade"
         })
       });
